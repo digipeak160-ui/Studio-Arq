@@ -1,0 +1,1038 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Architect Studio — We Design Your Dream Spaces</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pf1g2Y2+ZK6Dqk8w8n1b1Jq9uQb0cS2z5bM+QXZQ6yq7p3pE2Jxq2hzI1s5Ic7gJm3F1r4qq3mH9cQY6Y3k0A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- AOS (Animate on Scroll) -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <!-- Swiper (slider) -->
+  <link rel="stylesheet" href="https://unpkg.com/swiper@9/swiper-bundle.min.css" />
+
+  <!-- Favicon (simple SVG data URL as placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%22 y=%2255%22 font-size=%2250%22 text-anchor=%22middle%22>🏛️</text></svg>">
+
+  <style>
+    /* ============================
+       Variables & Theme
+       ============================ */
+    :root{
+      --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      --font-display: "Playfair Display", serif;
+      --transition: 300ms cubic-bezier(.2,.9,.3,1);
+      --gold: #c9a34b; /* highlight for dark mode */
+      --soft-gray: #f6f7f8;
+      --muted: #6b7280;
+      --glass: rgba(255,255,255,0.6);
+      --shadow: 0 6px 20px rgba(16,24,40,0.08);
+      --radius: 12px;
+    }
+
+    /* Light Theme */
+    :root[data-theme="light"]{
+      --bg: #ffffff;
+      --card-bg: #ffffff;
+      --text: #0b1220;
+      --muted: #495057;
+      --accent: #111827;
+      --primary: #0f172a;
+      --glass: rgba(255,255,255,0.7);
+      --inverse-bg: linear-gradient(180deg, rgba(255,255,255,0.5), rgba(245,245,245,0.5));
+      --nav-bg: rgba(255,255,255,0.6);
+      --btn-bg: linear-gradient(90deg, rgba(16,24,40,1), rgba(55,65,81,1));
+      --btn-color: #fff;
+      --highlight: #222;
+    }
+
+    /* Dark Theme */
+    :root[data-theme="dark"]{
+      --bg: #0f1214;
+      --card-bg: #111315;
+      --text: #e6e6e6;
+      --muted: #bfc5c9;
+      --accent: #f8f6f2;
+      --primary: #f3ead6;
+      --glass: rgba(255,255,255,0.03);
+      --inverse-bg: linear-gradient(180deg, rgba(20,20,20,0.5), rgba(10,10,10,0.4));
+      --nav-bg: rgba(18,18,18,0.6);
+      --btn-bg: linear-gradient(90deg, rgba(201,163,75,1), rgba(159,122,53,1));
+      --btn-color: #0b0b0b;
+      --highlight: var(--gold);
+    }
+
+    /* ============================
+       Global Styles
+       ============================ */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:var(--font-sans);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+      transition: background var(--transition), color var(--transition);
+      scroll-behavior:smooth;
+    }
+
+    a{color:inherit; text-decoration:none}
+    img{max-width:100%; display:block}
+    .container{
+      width:min(1180px, calc(100% - 40px));
+      margin:0 auto;
+    }
+
+    /* ============================
+       Navbar / Header
+       ============================ */
+    header{
+      position:fixed;
+      inset:0 0 auto 0;
+      z-index:60;
+      display:flex;
+      width:100%;
+      justify-content:center;
+      pointer-events:none;
+    }
+    .nav-wrap{
+      pointer-events:auto;
+      margin:18px auto;
+      width:min(1180px, calc(100% - 40px));
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background:var(--nav-bg);
+      backdrop-filter: blur(6px);
+      border-radius:14px;
+      padding:10px 18px;
+      box-shadow:var(--shadow);
+      transition: background var(--transition), transform 300ms ease;
+    }
+    .brand{
+      display:flex;
+      gap:14px;
+      align-items:center;
+    }
+    .brand h1{
+      margin:0;
+      font-family:var(--font-display);
+      font-weight:600;
+      letter-spacing:0.4px;
+      font-size:20px;
+      color:var(--accent);
+    }
+    nav{
+      display:flex;
+      gap:18px;
+      align-items:center;
+    }
+    nav a{
+      color:var(--muted);
+      font-weight:500;
+      padding:8px 10px;
+      border-radius:8px;
+      transition: color var(--transition), background var(--transition);
+      font-size:14px;
+    }
+    nav a:hover{ color:var(--highlight); background:rgba(0,0,0,0.04) }
+
+    .nav-actions{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .mode-toggle{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:transparent;
+      border:1px solid rgba(0,0,0,0.06);
+      padding:8px 10px;
+      border-radius:10px;
+      cursor:pointer;
+      transition: all var(--transition);
+      color:var(--muted);
+      font-size:14px;
+    }
+    .mode-toggle .fa-moon, .mode-toggle .fa-sun{ width:18px; text-align:center }
+
+    /* Mobile nav */
+    .hamburger{
+      display:none;
+      background:transparent;
+      border:0;
+      font-size:18px;
+      color:var(--muted);
+      cursor:pointer;
+    }
+
+    /* ============================
+       Hero
+       ============================ */
+    .hero{
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-bg{
+      position:absolute;
+      inset:0;
+      background-image:
+        linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.12)),
+        url('https://images.unsplash.com/photo-1505842672856-7c3e8b2a7f3a?q=80&w=2000&auto=format&fit=crop&ixlib=rb-4.0.3&s=3b374d72ff7f5d1b9b5a9b27b5f4d7e7');
+      background-size:cover;
+      background-position:center center;
+      transform:translateZ(0);
+      will-change:transform;
+      transition: transform 0.12s linear;
+      filter:contrast(1.02) saturate(1.02);
+    }
+    .hero-overlay{
+      position:absolute;
+      inset:0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.25));
+      mix-blend-mode: multiply;
+      pointer-events:none;
+    }
+    .hero-content{
+      position:relative;
+      z-index:3;
+      text-align:center;
+      padding:120px 18px;
+      color:var(--primary);
+    }
+    .hero h2{
+      font-family:var(--font-display);
+      font-size:46px;
+      margin:0 0 12px 0;
+      line-height:1.02;
+      letter-spacing:-0.6px;
+      color:var(--accent);
+      text-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    }
+    .typed{
+      color:var(--highlight);
+      display:inline-block;
+      position:relative;
+      padding-right:6px;
+    }
+    .hero p{
+      margin:0 auto 28px;
+      max-width:760px;
+      color:var(--muted);
+      font-size:17px;
+    }
+    .cta{
+      display:inline-flex;
+      align-items:center;
+      gap:12px;
+      padding:12px 18px;
+      border-radius:10px;
+      background:var(--btn-bg);
+      color:var(--btn-color);
+      font-weight:600;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+      cursor:pointer;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .cta:hover{ transform:translateY(-4px) }
+
+    /* subtle parallax layers */
+    .hero-decor{
+      position:absolute;
+      bottom:-40px;
+      left:10%;
+      width:40%;
+      height:220px;
+      background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(0,0,0,0.03));
+      border-radius:30px;
+      filter:blur(28px);
+      pointer-events:none;
+      z-index:2;
+    }
+
+    /* ============================
+       Sections
+       ============================ */
+    section{
+      padding:80px 0;
+    }
+    .section-title{
+      text-align:center;
+      margin-bottom:48px;
+    }
+    .section-title h3{
+      margin:0;
+      font-family:var(--font-display);
+      font-size:28px;
+      color:var(--accent);
+    }
+    .section-title p{
+      margin:8px 0 0;
+      color:var(--muted);
+    }
+
+    /* About */
+    .about{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:28px;
+      align-items:center;
+    }
+    .about .photo{
+      border-radius:16px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      background:linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.02));
+    }
+    .about img{ height:100%; object-fit:cover; min-height:320px; width:100% }
+    .about .bio{
+      color:var(--muted);
+    }
+    .bio h4{ margin:0 0 10px; font-size:20px; color:var(--accent) }
+    .bio p{ margin:0 0 12px; line-height:1.6 }
+
+    /* Services */
+    .services-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:18px;
+    }
+    .service{
+      background:var(--card-bg);
+      border-radius:12px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      transition: transform var(--transition), box-shadow var(--transition);
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .service:hover{
+      transform:translateY(-8px);
+      box-shadow: 0 18px 50px rgba(12,20,30,0.12);
+    }
+    .service .icon{
+      font-size:22px;
+      width:52px;
+      height:52px;
+      border-radius:10px;
+      background:linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.02));
+      display:grid;
+      place-items:center;
+      color:var(--highlight);
+    }
+    .service h5{ margin:0 0 6px; color:var(--accent) }
+    .service p{ margin:0; color:var(--muted); font-size:14px }
+
+    /* Projects - Swiper */
+    .projects-grid{ display:grid; gap:18px }
+    .swiper{
+      width:100%;
+      padding-bottom:18px;
+    }
+    .project-card{
+      position:relative;
+      border-radius:14px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    .project-card .overlay{
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.24));
+      opacity:0;
+      transition:opacity var(--transition);
+      display:flex;
+      align-items:flex-end;
+      padding:18px;
+      color:#fff;
+    }
+    .project-card:hover .overlay{ opacity:1 }
+    .project-card img{ width:100%; height:360px; object-fit:cover; transition:transform 600ms cubic-bezier(.2,.9,.3,1) }
+    .project-card:hover img{ transform:scale(1.06) }
+
+    /* Testimonials */
+    .testimonial{
+      display:flex;
+      gap:18px;
+      align-items:center;
+      background:var(--card-bg);
+      padding:18px;
+      border-radius:12px;
+      box-shadow:var(--shadow);
+    }
+    .person{
+      width:68px;
+      height:68px;
+      border-radius:50%;
+      overflow:hidden;
+      flex-shrink:0;
+      background:var(--glass);
+      display:grid;
+      place-items:center;
+    }
+    .person img{ width:100%; height:100%; object-fit:cover }
+    .quote{ color:var(--muted) }
+
+    /* Contact */
+    .contact-grid{
+      display:grid;
+      grid-template-columns:1fr 420px;
+      gap:28px;
+      align-items:start;
+    }
+    form{
+      background:var(--card-bg);
+      padding:18px;
+      border-radius:12px;
+      box-shadow:var(--shadow);
+    }
+    .form-row{ display:flex; gap:12px; margin-bottom:12px }
+    .form-row input, textarea{
+      width:100%;
+      padding:12px;
+      border-radius:10px;
+      border:1px solid rgba(0,0,0,0.06);
+      background:transparent;
+      color:var(--text);
+      outline:none;
+      transition:box-shadow var(--transition), border-color var(--transition);
+      font-size:15px;
+    }
+    textarea{ min-height:140px; resize:vertical }
+    .contact-info{
+      background:var(--card-bg);
+      padding:18px;
+      border-radius:12px;
+      box-shadow:var(--shadow);
+      color:var(--muted);
+    }
+    .contact-info a{ color:var(--highlight) }
+
+    /* Footer */
+    footer{
+      padding:28px 0;
+      border-top:1px solid rgba(0,0,0,0.04);
+      margin-top:20px;
+      color:var(--muted);
+    }
+    .socials a{ margin-right:12px; color:var(--muted) }
+
+    /* Scroll to top */
+    .to-top{
+      position:fixed;
+      right:20px;
+      bottom:28px;
+      width:44px;
+      height:44px;
+      border-radius:10px;
+      display:grid;
+      place-items:center;
+      box-shadow:var(--shadow);
+      background:var(--btn-bg);
+      color:var(--btn-color);
+      cursor:pointer;
+      transform:translateY(20px);
+      opacity:0;
+      transition:opacity var(--transition), transform var(--transition);
+      z-index:80;
+    }
+    .to-top.visible{ opacity:1; transform:translateY(0) }
+
+    /* Responsive */
+    @media (max-width:992px){
+      .about{ grid-template-columns:1fr; }
+      .services-grid{ grid-template-columns:repeat(2,1fr) }
+      .contact-grid{ grid-template-columns:1fr }
+      nav{ display:none }
+      .hamburger{ display:inline-block }
+      .nav-actions{ gap:8px }
+      .hero h2{ font-size:36px }
+      .projects-grid .project-card img{ height:260px }
+    }
+    @media (max-width:600px){
+      .services-grid{ grid-template-columns:1fr }
+    }
+
+    /* Tiny helpers */
+    .muted{ color:var(--muted) }
+    .mb-12{ margin-bottom:12px }
+  </style>
+</head>
+<body>
+  <!-- Root element theme attribute will be toggled by JS -->
+  <script>
+    // Immediately set theme to avoid flash of wrong theme
+    (function(){
+      const stored = localStorage.getItem('studio_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', stored);
+    })();
+  </script>
+
+  <!-- HEADER / NAV -->
+  <header>
+    <div class="nav-wrap container" role="banner" aria-label="Main navigation">
+      <div class="brand">
+        <!-- Simple typographic logo -->
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M6 14L10 10L14 14L18 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h1>Studio Arq — <span style="font-weight:400; font-size:12px; color:var(--muted)">Design & Architecture</span></h1>
+      </div>
+
+      <nav aria-label="Primary">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#projects">Projects</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="mode-toggle" id="themeToggle" aria-pressed="false" title="Toggle dark mode">
+          <i class="fa-solid fa-moon"></i>
+          <span class="mode-label">Dark</span>
+        </button>
+
+        <button class="hamburger" id="mobileMenuBtn" aria-label="Open menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section id="home" class="hero" role="region" aria-label="Hero section">
+      <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+      <div class="hero-overlay" aria-hidden="true"></div>
+
+      <div class="hero-content container" data-aos="fade-up" data-aos-duration="1000">
+        <h2>We Design <span class="typed" id="typed"></span></h2>
+        <p>At Studio Arq we craft thoughtful, modern architecture and interiors — blending functionality with tactile materiality to create timeless spaces for living and working.</p>
+
+        <div style="display:flex;gap:12px;align-items:center;justify-content:center">
+          <a class="cta" href="#projects" id="exploreBtn"><i class="fa-solid fa-images"></i> Explore Projects</a>
+          <a class="cta" href="#contact" style="background:transparent; color:var(--muted); box-shadow:none; border:1px solid rgba(0,0,0,0.06);"><i class="fa-solid fa-phone"></i> Get in Touch</a>
+        </div>
+      </div>
+
+      <div class="hero-decor" aria-hidden="true"></div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="container" data-aos="fade-up" data-aos-delay="80">
+      <div class="section-title">
+        <h3>About the Architect</h3>
+        <p>Combining rigorous architectural thinking with a passion for craft.</p>
+      </div>
+
+      <div class="about" role="article">
+        <div class="photo" data-aos="zoom-in" data-aos-delay="120">
+          <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=d0b6e5a1dbf1b1f9d8760a1aee3c2ac1" alt="Portrait of the architect">
+        </div>
+        <div class="bio" data-aos="fade-left" data-aos-delay="160">
+          <h4>Architect — Jane Doe, M.Arch</h4>
+          <p>Jane is a licensed architect and designer with 12+ years of experience in residential and commercial architecture. Educated at the University of Arts, her approach is rooted in careful site analysis, sustainable practices, and a restrained palette that prioritizes light and materiality.</p>
+
+          <p>Her studio focuses on creating humane spaces that are elegant, durable, and deeply connected to context. She leads design from concept through construction documentation, collaborating closely with craftsmen and consultants to realize every detail.</p>
+
+          <p style="margin-top:12px;"><strong>Education:</strong> M.Arch, University of Arts. <strong>Experience:</strong> 12 years across adaptive reuse, bespoke residences, and hospitality projects.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services" class="container" data-aos="fade-up" data-aos-delay="80">
+      <div class="section-title">
+        <h3>Services</h3>
+        <p>Comprehensive design services tailored to each project's needs.</p>
+      </div>
+
+      <div class="services-grid" aria-label="Services list">
+        <div class="service" data-aos="fade-up" data-aos-delay="120">
+          <div class="icon"><i class="fa-solid fa-couch"></i></div>
+          <div>
+            <h5>Interior Design</h5>
+            <p>Custom interiors with curated materials, furniture planning, and detailed finishes for a cohesive spatial experience.</p>
+          </div>
+        </div>
+
+        <div class="service" data-aos="fade-up" data-aos-delay="160">
+          <div class="icon"><i class="fa-solid fa-building"></i></div>
+          <div>
+            <h5>Exterior Architecture</h5>
+            <p>Architectural design for facades, additions, and new builds, emphasizing proportion, daylighting and performance.</p>
+          </div>
+        </div>
+
+        <div class="service" data-aos="fade-up" data-aos-delay="200">
+          <div class="icon"><i class="fa-solid fa-tree"></i></div>
+          <div>
+            <h5>Landscape Design</h5>
+            <p>Holistic outdoor spaces that connect built form to site, prioritizing native planting and low-maintenance solutions.</p>
+          </div>
+        </div>
+
+        <div class="service" data-aos="fade-up" data-aos-delay="240">
+          <div class="icon"><i class="fa-solid fa-cube"></i></div>
+          <div>
+            <h5>3D Visualization</h5>
+            <p>Photoreal renders and walkthroughs to communicate design intent for presentations and client approvals.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="section-title">
+        <h3>Selected Projects</h3>
+        <p>A curated selection of recent work — residences, hospitality, and adaptive reuse.</p>
+      </div>
+
+      <!-- Swiper main -->
+      <div class="projects-grid">
+        <div class="swiper main-swiper" aria-label="Featured projects">
+          <div class="swiper-wrapper">
+            <!-- Slide 1 -->
+            <div class="swiper-slide">
+              <div class="project-card" role="article">
+                <img src="https://images.unsplash.com/photo-1507089947368-19c1da9775ae?q=80&w=2000&auto=format&fit=crop&ixlib=rb-4.0.3&s=2d5f8b7e2e1f6a6d8f1d6be2b7d4e2e4" alt="Minimal residence">
+                <div class="overlay">
+                  <div>
+                    <strong>Minimal Residence</strong>
+                    <div style="font-size:13px; opacity:0.95">A private residence focusing on natural light and refined materials.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="swiper-slide">
+              <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1467269204594-9661b134dd2b?q=80&w=2000&auto=format&fit=crop&ixlib=rb-4.0.3&s=4f2c8d5a6a002ad2c9f8e6df5c7a1c6e" alt="Modern office">
+                <div class="overlay">
+                  <div>
+                    <strong>Studio Office</strong>
+                    <div style="font-size:13px; opacity:0.95">Adaptive reuse of an industrial building into a light-filled studio.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="swiper-slide">
+              <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1507089947368-19c1da9775ae?q=80&w=2000&auto=format&fit=crop&ixlib=rb-4.0.3&s=2d5f8b7e2e1f6a6d8f1d6be2b7d4e2e4" alt="Landscape project">
+                <div class="overlay">
+                  <div>
+                    <strong>Rooftop Garden</strong>
+                    <div style="font-size:13px; opacity:0.95">Public rooftop transformed into a layered green terrace.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slide 4 -->
+            <div class="swiper-slide">
+              <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=2000&auto=format&fit=crop&ixlib=rb-4.0.3&s=3f1c5a6a48f2aaf5b3d9c2a4e6a2f7e8" alt="Restaurant interior">
+                <div class="overlay">
+                  <div>
+                    <strong>Harbor Restaurant</strong>
+                    <div style="font-size:13px; opacity:0.95">Interior design using warm timber and tactile surfaces.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation -->
+          <div class="swiper-button-next" aria-hidden="true"></div>
+          <div class="swiper-button-prev" aria-hidden="true"></div>
+        </div>
+
+        <!-- Thumbnails -->
+        <div class="swiper thumb-swiper" aria-hidden="true" style="padding-top:12px;">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" style="height:90px; opacity:0.8"><img src="https://images.unsplash.com/photo-1507089947368-19c1da9775ae?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=2d5f8b7e2e1f6a6d8f1d6be2b7d4e2e4" alt=""></div>
+            <div class="swiper-slide" style="height:90px; opacity:0.8"><img src="https://images.unsplash.com/photo-1467269204594-9661b134dd2b?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=4f2c8d5a6a002ad2c9f8e6df5c7a1c6e" alt=""></div>
+            <div class="swiper-slide" style="height:90px; opacity:0.8"><img src="https://images.unsplash.com/photo-1507089947368-19c1da9775ae?q=80&w=2000&auto=format&fit=crop&ixlib=rb-4.0.3&s=2d5f8b7e2e1f6a6d8f1d6be2b7d4e2e4" alt=""></div>
+            <div class="swiper-slide" style="height:90px; opacity:0.8"><img src="https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=3f1c5a6a48f2aaf5b3d9c2a4e6a2f7e8" alt=""></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials" class="container" data-aos="fade-up" data-aos-delay="120">
+      <div class="section-title">
+        <h3>Testimonials</h3>
+        <p>Client feedback on our collaborative process and delivered work.</p>
+      </div>
+
+      <div class="swiper testimonial-swiper" aria-label="Client testimonials">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="testimonial">
+              <div class="person"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop&ixlib=rb-4.0.3&s=3b6e4a30c1e3edb2a1a0e7c4e2d5d6a7" alt="Client photo"></div>
+              <div>
+                <div class="quote">“Working with Jane transformed our concept into a serene, functional home. The attention to detail is exceptional.”</div>
+                <div style="margin-top:8px; font-weight:600;">— Michael R., Client</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="swiper-slide">
+            <div class="testimonial">
+              <div class="person"><img src="https://images.unsplash.com/photo-1545996124-1b3a36455f8b?q=80&w=200&auto=format&fit=crop&ixlib=rb-4.0.3&s=f8c3a1b694b3b3f7f6a2d4b5c1a7b8c9" alt="Client photo"></div>
+              <div>
+                <div class="quote">“Their process felt collaborative and transparent — the end result exceeded our expectations.”</div>
+                <div style="margin-top:8px; font-weight:600;">— Laura S., Developer</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="swiper-slide">
+            <div class="testimonial">
+              <div class="person"><img src="https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=200&auto=format&fit=crop&ixlib=rb-4.0.3&s=a7c3b8d9d5f6e7f8a9b2c3d4e5f6g7h8" alt="Client photo"></div>
+              <div>
+                <div class="quote">“Professional, timely, and creative — a studio you'd love to collaborate with again.”</div>
+                <div style="margin-top:8px; font-weight:600;">— Emma K., Owner</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-pagination" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="container" data-aos="fade-up" data-aos-delay="140">
+      <div class="section-title">
+        <h3>Contact</h3>
+        <p>Let's discuss your project. We respond to inquiries within 48 hours.</p>
+      </div>
+
+      <div class="contact-grid" aria-label="Contact section">
+        <form id="contactForm" aria-label="Contact form">
+          <div style="display:flex; justify-content:space-between; gap:12px;">
+            <input type="text" name="name" placeholder="Your name" required aria-label="Your name">
+            <input type="email" name="email" placeholder="Email address" required aria-label="Email address">
+          </div>
+          <div class="mb-12">
+            <input type="text" name="subject" placeholder="Subject" aria-label="Subject">
+          </div>
+          <div class="mb-12">
+            <textarea name="message" placeholder="Tell us about your project..." required aria-label="Message"></textarea>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <button type="submit" class="cta" style="background:var(--btn-bg); color:var(--btn-color)"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
+            <div id="formStatus" style="color:var(--muted); font-size:14px;"></div>
+          </div>
+        </form>
+
+        <aside class="contact-info" aria-label="Contact information">
+          <h4 style="margin-top:0; color:var(--accent)">Studio Arq</h4>
+          <p class="muted">123 Design Avenue<br>City, Country 12345</p>
+
+          <p style="margin-top:12px;"><strong>Phone:</strong> <a href="tel:+1234567890">+1 (234) 567-890</a></p>
+          <p><strong>Email:</strong> <a href="mailto:hello@studioarq.com">hello@studioarq.com</a></p>
+
+          <div style="margin-top:16px;">
+            <strong>Follow</strong>
+            <div class="socials" style="margin-top:8px;">
+              <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+              <a href="#" aria-label="Pinterest"><i class="fa-brands fa-pinterest"></i></a>
+              <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+          </div>
+
+          <div style="margin-top:18px;">
+            <strong>Location</strong>
+            <div style="margin-top:8px; border-radius:10px; overflow:hidden;">
+              <!-- Google Map embed placeholder - replace src with actual embed link -->
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019713021826!2d-122.41941508468398!3d37.774929779759785!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085808c79f8b9a3%3A0x9b0a1f3a1f2b3c4d!2sSan+Francisco%2C+CA!5e0!3m2!1sen!2sus!4v1600000000000!5m2!1sen!2sus" width="100%" height="180" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Studio location map"></iframe>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="container">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+      <div>&copy; 2025 Studio Arq — All rights reserved</div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="socials" aria-label="Social links">
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="Pinterest"><i class="fa-brands fa-pinterest"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        </div>
+        <button class="cta" id="topBtn" title="Back to top" style="padding:8px 12px; font-size:14px">Top</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to top floating button -->
+  <button class="to-top" id="toTopBtn" aria-label="Scroll to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+  <!-- ============================
+       Scripts & Libraries
+       ============================ -->
+
+  <!-- AOS -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <!-- Swiper JS -->
+  <script src="https://unpkg.com/swiper@9/swiper-bundle.min.js"></script>
+
+  <script>
+    /* ============================
+       Helper: DOM shortcuts
+       ============================ */
+    const $ = (sel, ctx=document) => ctx.querySelector(sel);
+    const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
+
+    /* ============================
+       Theme Toggle
+       - Saves selection to localStorage ('studio_theme')
+       - Toggles data-theme attribute on root
+       ============================ */
+    (function themeToggleInit(){
+      const toggle = $('#themeToggle');
+      const label = toggle.querySelector('.mode-label');
+      function setTheme(theme){
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('studio_theme', theme);
+        label.textContent = theme === 'dark' ? 'Dark' : 'Light';
+        toggle.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+        // change icon
+        toggle.querySelector('i').className = theme === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+      }
+
+      // initialize on click
+      toggle.addEventListener('click', ()=>{
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        setTheme(next);
+      });
+
+      // Set initial label properly
+      setTheme(document.documentElement.getAttribute('data-theme') || 'light');
+    })();
+
+    /* ============================
+       Smooth scroll for nav links and CTA
+       ============================ */
+    (function smoothLinks(){
+      const navLinks = $$('nav a');
+      navLinks.forEach(a=>{
+        a.addEventListener('click', (e)=>{
+          e.preventDefault();
+          const id = a.getAttribute('href').slice(1);
+          const el = document.getElementById(id);
+          if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+        });
+      });
+
+      $('#exploreBtn').addEventListener('click', (e)=>{
+        // default is anchor to #projects but ensure smooth behavior
+        e.preventDefault();
+        document.getElementById('projects').scrollIntoView({behavior:'smooth', block:'start'});
+      });
+
+      $('#topBtn').addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+    })();
+
+    /* ============================
+       AOS init
+       ============================ */
+    AOS.init({
+      once:true,
+      duration:800,
+      offset:120,
+      easing:'cubic-bezier(.2,.9,.3,1)'
+    });
+
+    /* ============================
+       Parallax for hero background
+       - subtle translate on scroll
+       ============================ */
+    (function heroParallax(){
+      const heroBg = document.getElementById('heroBg');
+      window.addEventListener('scroll', ()=>{
+        const scrolled = window.scrollY;
+        heroBg.style.transform = `translateY(${scrolled * 0.12}px) scale(1.03)`;
+      }, {passive:true});
+    })();
+
+    /* ============================
+       Typing effect in hero
+       - simple JS type/erase loop
+       ============================ */
+    (function typingEffect(){
+      const el = document.getElementById('typed');
+      const words = ['Modern Homes', 'Thoughtful Interiors', 'Timeless Exteriors', 'Beautiful Landscapes'];
+      let w = 0, i = 0, forward = true;
+      const speed = 80, pause = 1500;
+
+      function tick(){
+        const word = words[w];
+        if(forward){
+          i++;
+          el.textContent = word.slice(0, i);
+          if(i >= word.length){ forward = false; setTimeout(tick, pause); return; }
+        } else {
+          i--;
+          el.textContent = word.slice(0, i);
+          if(i === 0){ forward = true; w = (w+1) % words.length; }
+        }
+        setTimeout(tick, speed + Math.random()*40);
+      }
+      tick();
+    })();
+
+    /* ============================
+       Swiper setup
+       - Projects main + thumbs
+       - Testimonials simple loop with fade
+       ============================ */
+    (function initSwipers(){
+      const thumbSwiper = new Swiper('.thumb-swiper', {
+        spaceBetween:12,
+        slidesPerView:4,
+        freeMode:true,
+        watchSlidesProgress:true,
+        breakpoints:{
+          0:{ slidesPerView:2 },
+          640:{ slidesPerView:4 }
+        }
+      });
+
+      const mainSwiper = new Swiper('.main-swiper', {
+        loop:true,
+        spaceBetween:18,
+        navigation:{
+          nextEl:'.swiper-button-next',
+          prevEl:'.swiper-button-prev'
+        },
+        thumbs:{ swiper: thumbSwiper },
+        // accessible keyboard
+        keyboard:{ enabled:true },
+        autoplay:{ delay:4200, disableOnInteraction:false },
+      });
+
+      // Testimonials
+      new Swiper('.testimonial-swiper', {
+        loop:true,
+        spaceBetween:18,
+        slidesPerView:1,
+        centeredSlides:true,
+        pagination:{ el:'.swiper-pagination', clickable:true },
+        autoplay:{ delay:5200, disableOnInteraction:false },
+        effect:'fade',
+        fadeEffect:{ crossFade:true },
+      });
+    })();
+
+    /* ============================
+       Contact form handling (demo)
+       - Prevent default, show status, clear inputs
+       ============================ */
+    (function contactForm(){
+      const form = $('#contactForm');
+      const status = $('#formStatus');
+      form.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        status.textContent = 'Sending...';
+        // Simulate network
+        setTimeout(()=>{
+          status.textContent = 'Thank you — your message has been sent!';
+          form.reset();
+          setTimeout(()=> status.textContent = '', 5000);
+        }, 900);
+      });
+    })();
+
+    /* ============================
+       Scroll to top button visibility
+       ============================ */
+    (function toTop(){
+      const btn = document.getElementById('toTopBtn');
+      window.addEventListener('scroll', ()=>{
+        if(window.scrollY > 360) btn.classList.add('visible');
+        else btn.classList.remove('visible');
+      }, {passive:true});
+      btn.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+    })();
+
+    /* ============================
+       Mobile menu simple toggle (progressive)
+       ============================ */
+    (function mobileMenu(){
+      const btn = document.getElementById('mobileMenuBtn');
+      const nav = document.querySelector('nav');
+      let open = false;
+
+      btn.addEventListener('click', ()=>{
+        open = !open;
+        if(open){
+          nav.style.display = 'flex';
+          nav.style.position = 'absolute';
+          nav.style.top = '68px';
+          nav.style.right = '18px';
+          nav.style.background = 'var(--card-bg)';
+          nav.style.padding = '12px';
+          nav.style.borderRadius = '10px';
+          nav.style.boxShadow = 'var(--shadow)';
+        } else {
+          nav.removeAttribute('style');
+        }
+      });
+
+      // close when clicking outside
+      document.addEventListener('click', (e)=>{
+        if(open && !btn.contains(e.target) && !nav.contains(e.target)){
+          nav.removeAttribute('style');
+          open = false;
+        }
+      });
+    })();
+
+    /* ============================
+       Accessibility: enable focus outline when keyboard used
+       ============================ */
+    (function focusOutline(){
+      function handleFirstTab(e){
+        if(e.key === 'Tab'){
+          document.body.classList.add('show-focus-outlines');
+          window.removeEventListener('keydown', handleFirstTab);
+        }
+      }
+      window.addEventListener('keydown', handleFirstTab);
+    })();
+
+  </script>
+</body>
+</html>
